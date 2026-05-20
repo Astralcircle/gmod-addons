@@ -43,11 +43,17 @@ end
 
 if ( SERVER ) then
 
-	-- Periodically sync data func train with the client
-	timer.Create( "rb655_propperties_sync_tracktrain", 1, 0, function()
-		for id, ent in ipairs(ents.FindByClass("func_tracktrain")) do
-			ent:SetNW2Int( "m_dir", ent:GetInternalVariable( "m_dir" ) )
-			ent:SetNW2Bool( "m_moving", ent:GetInternalVariable( "speed" ) != 0 )
+	-- Periodically sync data with the client.
+	timer.Create( "rb655_propperties_sync", 1, 0, function()
+		for id, ent in ents.Iterator() do
+			local class = ent:GetClass()
+
+			if class == "func_tracktrain" then
+				ent:SetNW2Int( "m_dir", ent:GetInternalVariable( "m_dir" ) )
+				ent:SetNW2Bool( "m_moving", ent:GetInternalVariable( "speed" ) != 0 )
+			elseif class == "prop_vehicle_jeep" then
+				ent:SetNW2Bool( "m_bRadarEnabled",  ent:GetInternalVariable( "m_bRadarEnabled" ) )
+			end
 		end
 	end )
 
@@ -285,7 +291,7 @@ AddEntFireProperty( "rb655_vehicle_radar", "Enable Radar", 655, function( ent )
 	if ( !ent:IsVehicle() or ent:GetClass() != "prop_vehicle_jeep" ) then return false end
 	if ( ent:LookupAttachment( "controlpanel0_ll" ) == 0 ) then return false end -- These two attachments must exist!
 	if ( ent:LookupAttachment( "controlpanel0_ur" ) == 0 ) then return false end
-	if ( ent:GetInternalVariable( "m_bRadarEnabled" ) ) then return false end
+	if ( ent:GetNW2Bool( "m_bRadarEnabled" ) ) then return false end
 	return true
 end, "EnableRadar", "icon16/application_add.png" )
 
@@ -293,7 +299,7 @@ AddEntFireProperty( "rb655_vehicle_radar_off", "Disable Radar", 655, function( e
 	if ( !ent:IsVehicle() or ent:GetClass() != "prop_vehicle_jeep" ) then return false end
 	-- if ( ent:LookupAttachment( "controlpanel0_ll" ) == 0 ) then return false end -- These two attachments must exist!
 	-- if ( ent:LookupAttachment( "controlpanel0_ur" ) == 0 ) then return false end
-	if ( !ent:GetInternalVariable( "m_bRadarEnabled" ) ) then return false end
+	if ( !ent:GetNW2Bool( "m_bRadarEnabled" ) ) then return false end
 	return true
 end, "DisableRadar", "icon16/application_delete.png" )
 
