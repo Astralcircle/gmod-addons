@@ -70,13 +70,13 @@ local ToggleIcon = "icon16/arrow_switch.png"
 
 AddEntFireProperty( "rb655_door_open", "Open", 655, function( ent, ply )
 	local closed = ent:GetInternalVariable( "m_eDoorState" )
-	if ( closed != 0 and class != 3 and ent:GetClass() == "prop_door_rotating" ) then return false end
+	if ( closed != 0 and closed != 3 and ent:GetClass() == "prop_door_rotating" ) then return false end
 
 	return rb655_property_filter( { "prop_door_rotating", "func_door_rotating", "func_door" }, ent, ply )
 end, "Open", "icon16/door_open.png" )
 AddEntFireProperty( "rb655_door_close", "Close", 656, function( ent, ply )
 	local closed = ent:GetInternalVariable( "m_eDoorState" )
-	if ( closed == 0 or closed == 3 and ent:GetClass() == "prop_door_rotating" ) then return false end
+	if ( ( closed == 0 or closed == 3 ) and ent:GetClass() == "prop_door_rotating" ) then return false end
 
 	return rb655_property_filter( { "prop_door_rotating", "func_door_rotating", "func_door" }, ent, ply )
 end, "Close", "icon16/door.png" )
