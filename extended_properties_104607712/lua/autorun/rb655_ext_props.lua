@@ -48,10 +48,10 @@ if ( SERVER ) then
 		for id, ent in ents.Iterator() do
 			local class = ent:GetClass()
 
-			if class == "func_tracktrain" then
+			if ( class == "func_tracktrain" ) then
 				ent:SetNW2Int( "m_dir", ent:GetInternalVariable( "m_dir" ) )
 				ent:SetNW2Bool( "m_moving", ent:GetInternalVariable( "speed" ) != 0 )
-			elseif class == "prop_vehicle_jeep" then
+			elseif ( class == "prop_vehicle_jeep" ) then
 				ent:SetNW2Bool( "m_bRadarEnabled",  ent:GetInternalVariable( "m_bRadarEnabled" ) )
 			end
 		end
@@ -70,7 +70,7 @@ local ToggleIcon = "icon16/arrow_switch.png"
 
 AddEntFireProperty( "rb655_door_open", "Open", 655, function( ent, ply )
 	local closed = ent:GetInternalVariable( "m_eDoorState" )
-	if ( closed ~= 0 and class ~= 3 and ent:GetClass() == "prop_door_rotating" ) then return false end
+	if ( closed != 0 and class != 3 and ent:GetClass() == "prop_door_rotating" ) then return false end
 
 	return rb655_property_filter( { "prop_door_rotating", "func_door_rotating", "func_door" }, ent, ply )
 end, "Open", "icon16/door_open.png" )
@@ -111,7 +111,7 @@ AddEntFireProperty( "rb655_func_tracktrain_Stop", "Stop", 658, function( ent, pl
 	return rb655_property_filter( "func_tracktrain", ent, ply )
 end, "Stop", "icon16/shape_square.png" )
 AddEntFireProperty( "rb655_func_tracktrain_Resume", "Resume", 659, function( ent, ply )
-	if ( ent:GetNW2Int( "m_moving" ) ) then return false end
+	if ( ent:GetNW2Bool( "m_moving" ) ) then return false end
 
 	return rb655_property_filter( "func_tracktrain", ent, ply )
 end, "Resume", "icon16/resultset_next.png" )
