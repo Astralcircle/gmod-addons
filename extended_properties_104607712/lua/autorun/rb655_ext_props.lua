@@ -45,15 +45,9 @@ if ( SERVER ) then
 
 	-- Periodically sync data with the client.
 	timer.Create( "rb655_propperties_sync", 1, 0, function()
-		for id, ent in ents.Iterator() do
-			local class = ent:GetClass()
-
-			if ( class == "func_tracktrain" ) then
-				ent:SetNW2Int( "m_dir", ent:GetInternalVariable( "m_dir" ) )
-				ent:SetNW2Bool( "m_moving", ent:GetInternalVariable( "speed" ) != 0 )
-			elseif ( class == "prop_vehicle_jeep" ) then
-				ent:SetNW2Bool( "m_bRadarEnabled",  ent:GetInternalVariable( "m_bRadarEnabled" ) )
-			end
+		for id, ent in ents.FindByClass( "func_tracktrain" ) do
+			ent:SetNW2Int( "m_dir", ent:GetInternalVariable( "m_dir" ) )
+			ent:SetNW2Bool( "m_moving", ent:GetInternalVariable( "speed" ) != 0 )
 		end
 	end )
 
@@ -279,6 +273,14 @@ end, "icon16/arrow_refresh.png" )
 
 -------------------------------------------------- Vehicles --------------------------------------------------
 
+local function HasRadar( jeep )
+	for _, ent in ipairs( jeep:GetChildren() ) do
+		if ( ent:GetClass() == "vgui_screen" ) then
+			return true
+		end
+	end
+end
+
 AddEntFunctionProperty( "rb655_vehicle_exit", "Kick Driver", 655, function( ent )
 	if ( ent:IsVehicle() and IsValid( ent:GetDriver() ) ) then return true end
 	return false
@@ -291,7 +293,7 @@ AddEntFireProperty( "rb655_vehicle_radar", "Enable Radar", 655, function( ent )
 	if ( !ent:IsVehicle() or ent:GetClass() != "prop_vehicle_jeep" ) then return false end
 	if ( ent:LookupAttachment( "controlpanel0_ll" ) == 0 ) then return false end -- These two attachments must exist!
 	if ( ent:LookupAttachment( "controlpanel0_ur" ) == 0 ) then return false end
-	if ( ent:GetNW2Bool( "m_bRadarEnabled" ) ) then return false end
+	if ( HasRadar( ent ) ) then return false end
 	return true
 end, "EnableRadar", "icon16/application_add.png" )
 
@@ -299,7 +301,7 @@ AddEntFireProperty( "rb655_vehicle_radar_off", "Disable Radar", 655, function( e
 	if ( !ent:IsVehicle() or ent:GetClass() != "prop_vehicle_jeep" ) then return false end
 	-- if ( ent:LookupAttachment( "controlpanel0_ll" ) == 0 ) then return false end -- These two attachments must exist!
 	-- if ( ent:LookupAttachment( "controlpanel0_ur" ) == 0 ) then return false end
-	if ( !ent:GetNW2Bool( "m_bRadarEnabled" ) ) then return false end
+	if ( !HasRadar( ent ) ) then return false end
 	return true
 end, "DisableRadar", "icon16/application_delete.png" )
 
