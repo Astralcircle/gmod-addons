@@ -45,7 +45,7 @@ if ( SERVER ) then
 
 	-- Periodically sync data with the client.
 	timer.Create( "rb655_propperties_sync", 1, 0, function()
-		for id, ent in ents.FindByClass( "func_tracktrain" ) do
+		for id, ent in ipairs( ents.FindByClass( "func_tracktrain" ) ) do
 			ent:SetNW2Int( "m_dir", ent:GetInternalVariable( "m_dir" ) )
 			ent:SetNW2Bool( "m_moving", ent:GetInternalVariable( "speed" ) != 0 )
 		end
@@ -274,7 +274,7 @@ end, "icon16/arrow_refresh.png" )
 -------------------------------------------------- Vehicles --------------------------------------------------
 
 local function HasRadar( jeep )
-	for _, ent in ipairs( jeep:GetChildren() ) do
+	for id, ent in ipairs( jeep:GetChildren() ) do
 		if ( ent:GetClass() == "vgui_screen" ) then
 			return true
 		end
