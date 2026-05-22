@@ -75,12 +75,12 @@ AddEntFireProperty( "rb655_door_close", "Close", 656, function( ent, ply )
 	return rb655_property_filter( { "prop_door_rotating", "func_door_rotating", "func_door" }, ent, ply )
 end, "Close", "icon16/door.png" )
 AddEntFireProperty( "rb655_door_lock", "Lock", 657, function( ent, ply )
-	if ( ent:GetInternalVariable( ent:IsVehicle() and "VehicleLocked" or "m_bLocked" ) and ent:GetClass() != "prop_vehicle_prisoner_pod" ) then return false end
+	if ( ent:GetInternalVariable( "m_bLocked" ) and ent:GetClass() != "prop_vehicle_prisoner_pod" ) then return false end
 
 	return rb655_property_filter( { "prop_door_rotating", "func_door_rotating", "func_door", "prop_vehicle_jeep", "prop_vehicle_airboat", "prop_vehicle_prisoner_pod" }, ent, ply )
 end, "Lock", "icon16/lock.png" )
 AddEntFireProperty( "rb655_door_unlock", "Unlock", 658, function( ent, ply )
-	if ( !ent:GetInternalVariable( ent:IsVehicle() and "VehicleLocked" or "m_bLocked" ) and ent:GetClass() != "prop_vehicle_prisoner_pod" ) then return false end
+	if ( !ent:GetInternalVariable( "m_bLocked" ) and ent:GetClass() != "prop_vehicle_prisoner_pod" ) then return false end
 
 	return rb655_property_filter( { "prop_door_rotating", "func_door_rotating", "func_door", "prop_vehicle_jeep", "prop_vehicle_airboat", "prop_vehicle_prisoner_pod" }, ent, ply )
 end, "Unlock", "icon16/lock_open.png" )
